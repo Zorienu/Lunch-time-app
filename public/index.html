@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- custom css -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- font awesome cdn -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- Raleway font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <title>Lunch time</title>
+    <!-- yellowtail font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
+    <!-- Lobster font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <!-- pirata one font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <header class="nav-bar">
+            <h1>Lunch time</h1>
+            <h3>You're logged as Jasyd</h3>
+            <a href="#" id="logout-btn">Logout</a>
+        </header>
+
+        <div class="container">
+            <div class="cards" id="cards"></div>
+            <div class="pricelist">
+                <h2>Your order</h2>
+                <ul id="pricelist" class="pricelist__ul">
+                </ul>
+                <div>
+                    <h3>$</h3>
+                    <h3 id="total-price" class="total-price">0</h3>
+                </div>
+                <form class="form-order" id="form-order">
+                    <input type="submit" id="submit-order-btn" value="Submit order"></input:submi>
+                </form>
+            </div>
+        </div>
+
+        <div class="price-list">
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
