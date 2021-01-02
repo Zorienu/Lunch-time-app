@@ -16,7 +16,7 @@ router.post('/register', (req, res) => {
     const { email, password } = req.body
     Users.findOne({ email }).exec()
         .then(user => {
-            if (user) return res.send('El usuario ya existe')
+            if (user) return res.send({ message: 'El usuario ya existe' })
 
             crypto.randomBytes(16, (err, salt) => {
                 const newSalt = salt.toString('base64')
@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
                         address: req.body.address,
                         phone: req.body.phone,
                         salt: newSalt
-                    }).then(() => res.send('Usuario creado con éxito'))
+                    }).then(() => res.send({ message: 'Usuario creado con éxito' }))
                 })
             })
         })
@@ -38,10 +38,10 @@ router.post('/login', (req, res) => {
     const { email, password } = req.body
     Users.findOne({ email }).exec()
         .then(user => {
-            if (!user) return res.send('Usuario incorrectos...')
+            if (!user) return res.send({ token: null, message: 'Usuario y/o contraseña incorrectos...' })
             
             crypto.pbkdf2(password, user.salt, 10000, 64, 'sha1', (err, encryptedPassword) => {
-                if (user.password !== encryptedPassword.toString('base64')) return res.send('Usuario o contraseña incorrectos...')
+                if (user.password !== encryptedPassword.toString('base64')) return res.send({ token: null, message: 'Usuario y/o contraseña incorrectos...' })
 
                 const token = signToken(user._id)
                 return res.send({ token })

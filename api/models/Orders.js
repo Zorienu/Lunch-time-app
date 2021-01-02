@@ -6,7 +6,7 @@ const Order = new Schema({
     user_address: String,
     user_phone: String,
     order: [{
-        meal_id: {type: Schema.Types.ObjectId, ref: 'Meal'},
+        meal: String,
         quantity: Number
     }]
 })

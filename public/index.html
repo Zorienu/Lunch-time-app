@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- custom css -->
     <link rel="stylesheet" href="styles.css">
+    <!-- custom login css -->
+    <link rel="stylesheet" href="loginStyles.css">
     <!-- font awesome cdn -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- Raleway font -->
@@ -23,9 +25,12 @@
 </head>
 <body>
     <div id="app">
+    </div>
+
+    <template id="user-template">
         <header class="nav-bar">
             <h1>Lunch time</h1>
-            <h3>You're logged as Jasyd</h3>
+            <h3 id="nav-bar-msg">You're logged as Jasyd</h3>
             <a href="#" id="logout-btn">Logout</a>
         </header>
 
@@ -44,10 +49,15 @@
                 </form>
             </div>
         </div>
+    </template>
 
-        <div class="price-list">
-        </div>
-    </div>
+    <template id="login-template">
+        <form id="login-form">
+            <input type="text" placeholder="Ingrese su e-mail" id="login-email">
+            <input type="password" placeholder="Ingrese su contraseña" id="login-password">
+            <input type="submit" value="Iniciar sesión">
+        </form>
+    </template>
     <script src="main.js"></script>
 </body>
 </html>

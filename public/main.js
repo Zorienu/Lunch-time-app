@@ -1,3 +1,4 @@
+let fetchedUser = JSON.parse(localStorage.getItem('user')) || null
 let mealsState = []
 
 const stringToHTML = (s) => {
@@ -78,9 +79,7 @@ const renderCard = (meal) => {
     return element
 }
 
-
-
-window.onload = () => {
+const initializeMealsCreation = () => {
     fetch('https://lunch-time.zorienu.vercel.app/api/meals')
         .then(x => x.json())
         .then(meals => {
@@ -91,12 +90,103 @@ window.onload = () => {
             mealCardTemplates.forEach(element => cards.appendChild(element))
             meals.map(addEventsCards)
         })
+}
 
+const initializeOrderCreation = () => {
     const submitOrderForm = document.getElementById('form-order')
     submitOrderForm.onsubmit = (e) => {
         e.preventDefault()
-        //const orderList = []
-        const orderList = mealsState.filter(meal => createMealObject(meal))
+        const orderList = mealsState.map(meal => createMealObject(meal))
+            .filter(order => order !== undefined)
+
         console.log(orderList)
+        const orderObject = {
+                user_email: fetchedUser.email,    
+                user_address: fetchedUser.address,
+                user_phone: fetchedUser.phone,
+                order: orderList
+            }
+
+        fetch('https://lunch-time.zorienu.vercel.app/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: localStorage.getItem('token')
+            },
+            body: JSON.stringify(orderObject) 
+        })
+        .then(res => res.json())
+        .then(console.log)
     }
+}
+
+const renderLogin = () => {
+    const app = document.getElementById('app')
+    const loginTemplate = document.getElementById('login-template')
+    app.innerHTML = loginTemplate.innerHTML
+
+    const loginForm = document.getElementById('login-form')
+    loginForm.onsubmit = (e) => {
+        e.preventDefault()
+        const email = document.getElementById('login-email').value
+        const password = document.getElementById('login-password').value
+        
+        fetch('https://lunch-time.zorienu.vercel.app/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password }) 
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (!res.token) return console.log(res.message)
+            localStorage.setItem('token', res.token)
+            return res.token
+        })
+        .then(token => {
+            return fetch('https://lunch-time.zorienu.vercel.app/api/auth/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: token
+                }
+            })
+        })
+        .then(res => res.json())
+        .then(user => {
+            fetchedUser = user
+            localStorage.setItem('user', JSON.stringify(user))
+            renderApp()
+        })
+    }
+}
+
+const setLogoutbutton = () => {
+    const button = document.getElementById('logout-btn')
+    button.addEventListener('click', () => {
+        localStorage.removeItem('token')
+        renderApp()
+    })
+}
+
+const initializeNavbar = () => {
+    setLogoutbutton()
+    const navBarMessage = document.getElementById('nav-bar-msg')
+    navBarMessage.innerText = `You're logged as ${fetchedUser.email}`
+}
+const renderApp = () => {
+    token = localStorage.getItem('token')
+    if (!token) {
+        return renderLogin()
+    }
+
+    // replace div app with user-template HTML
+    document.getElementById('app').innerHTML = document.getElementById('user-template').innerHTML
+    initializeMealsCreation()
+    initializeOrderCreation()
+    initializeNavbar()
+}
+window.onload = () => {
+    renderApp()
 }

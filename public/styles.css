@@ -20,14 +20,14 @@ body {
 .nav-bar {
     background-color: rgb(0, 140, 255);
     color: #fff;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0px 3px 5px rgba(0,0,0,0.3);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.3);    
 }
 
 .nav-bar h1 {
