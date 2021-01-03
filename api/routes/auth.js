@@ -23,6 +23,7 @@ router.post('/register', (req, res) => {
                 crypto.pbkdf2(password, newSalt, 10000, 64, 'sha1', (err, encryptedPassword) => {
                     const newPassword = encryptedPassword.toString('base64')
                     Users.create({
+                        name: req.body.name,
                         email,
                         password: newPassword,
                         address: req.body.address,
@@ -52,7 +53,10 @@ router.post('/login', (req, res) => {
 
 router.get('/me', isAuthenticated, (req, res) => {
     res.send({
+        name: req.user.name,
         email: req.user.email,
+        address: req.user.address,
+        phone: req.user.phone,
         role: req.user.role
     })
 })

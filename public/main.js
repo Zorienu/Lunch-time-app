@@ -96,17 +96,22 @@ const initializeOrderCreation = () => {
     const submitOrderForm = document.getElementById('form-order')
     submitOrderForm.onsubmit = (e) => {
         e.preventDefault()
-        const orderList = mealsState.map(meal => createMealObject(meal))
-            .filter(order => order !== undefined)
+        const totalPrice = parseInt(document.getElementById('total-price').innerText)
+        console.log(totalPrice)
+        if (totalPrice === 0) return alert('Debe seleccionar algún plato...')
 
-        console.log(orderList)
+        const orderList = mealsState.map(meal => createMealObject(meal))
+            .filter(order => order !== undefined) // create array of meals for the order
+
         const orderObject = {
+                user_name: fetchedUser.name,
                 user_email: fetchedUser.email,    
                 user_address: fetchedUser.address,
                 user_phone: fetchedUser.phone,
+                price: totalPrice,
                 order: orderList
             }
-
+        console.log(fetchedUser)
         fetch('https://lunch-time.zorienu.vercel.app/api/orders', {
             method: 'POST',
             headers: {
@@ -116,7 +121,53 @@ const initializeOrderCreation = () => {
             body: JSON.stringify(orderObject) 
         })
         .then(res => res.json())
-        .then(console.log)
+        .then(alert('Orden creada con éxito...'))
+    }
+}
+
+const renderRegister = () => {
+    const app = document.getElementById('app')
+    const registerTemplate = document.getElementById('register-template')
+    app.innerHTML = registerTemplate.innerHTML
+
+    const registerForm = document.getElementById('register-form')
+    registerForm.onsubmit = (e) => {
+        e.preventDefault()
+        const name = document.getElementById('user-name').value
+        const email = document.getElementById('user-email').value
+        const password = document.getElementById('user-password').value
+        const address = document.getElementById('user-address').value
+        const phone = document.getElementById('user-phone').value
+        
+        const user = {
+            name,
+            email,
+            password,
+            address,
+            phone,
+        }
+
+        fetch('https://lunch-time.zorienu.vercel.app/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then(res => res.json())
+        .then(message => {
+            const registerMsg = document.getElementById('register-message')
+            registerMsg.removeAttribute('hidden')
+            registerMsg.innerText = message.message
+            
+            if (message.message == 'Usuario creado con éxito') {
+                registerMsg.style.backgroundImage = 'linear-gradient(to bottom, rgb(0, 225, 0), rgb(0, 185, 0))'
+                setTimeout(() => { renderLogin() }, 1500)
+            } else {
+                registerMsg.style.backgroundImage = 'linear-gradient(to bottom, rgb(202, 0, 0), rgb(185, 0, 0))'
+            }
+
+        })
     }
 }
 
@@ -140,26 +191,37 @@ const renderLogin = () => {
         })
         .then(res => res.json())
         .then(res => {
-            if (!res.token) return console.log(res.message)
+            const loginMessage = document.getElementById('login-message')
+            if (!res.token) {
+                loginMessage.removeAttribute('hidden')
+                console.log('neee')
+                return loginMessage.innerText = res.message
+            }
+            loginMessage.setAttribute('hidden', true)
+            loginMessage.innerText = ''
             localStorage.setItem('token', res.token)
-            return res.token
-        })
-        .then(token => {
-            return fetch('https://lunch-time.zorienu.vercel.app/api/auth/me', {
+            
+            fetch('https://lunch-time.zorienu.vercel.app/api/auth/me', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    authorization: token
+                    authorization: localStorage.getItem('token')
                 }
             })
-        })
-        .then(res => res.json())
-        .then(user => {
-            fetchedUser = user
-            localStorage.setItem('user', JSON.stringify(user))
-            renderApp()
+            .then(res => res.json())
+            .then(user => {
+                fetchedUser = user
+                localStorage.setItem('user', JSON.stringify(user))
+                renderApp()
+            })
         })
     }
+
+    // register form
+    const registerBtn = document.getElementById('register-btn')
+    registerBtn.addEventListener('click', () => {
+        renderRegister()
+    })
 }
 
 const setLogoutbutton = () => {
@@ -173,7 +235,7 @@ const setLogoutbutton = () => {
 const initializeNavbar = () => {
     setLogoutbutton()
     const navBarMessage = document.getElementById('nav-bar-msg')
-    navBarMessage.innerText = `You're logged as ${fetchedUser.email}`
+    navBarMessage.innerText = `You're logged as ${fetchedUser.name}`
 }
 const renderApp = () => {
     token = localStorage.getItem('token')

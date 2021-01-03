@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <!-- custom login css -->
     <link rel="stylesheet" href="loginStyles.css">
+    <!-- custom register css -->
+    <link rel="stylesheet" href="registerStyles.css">
     <!-- font awesome cdn -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <!-- Raleway font -->
@@ -52,11 +54,37 @@
     </template>
 
     <template id="login-template">
-        <form id="login-form">
-            <input type="text" placeholder="Ingrese su e-mail" id="login-email">
-            <input type="password" placeholder="Ingrese su contraseña" id="login-password">
-            <input type="submit" value="Iniciar sesión">
-        </form>
+        <div class="login-container">
+            <div class="login-img"></div>
+
+            <form id="login-form">
+                <h1 class="login-title">Lunch time</h1>
+                <h2>Welcome</h2>
+                <input type="text" placeholder="Ingrese su e-mail" id="login-email">
+                <input type="password" placeholder="Ingrese su contraseña" id="login-password">
+                <input type="submit" value="Iniciar sesión">
+                <input type="button" value="Registrarse" id="register-btn">
+                <p id="login-message" hidden></p>
+            </form>
+        </div>
+    </template>
+
+    <template id="register-template">
+        <div class="register-container">
+            <div class="register-img"></div>
+            
+            <form id="register-form">
+                <h1 class="login-title">Lunch time</h1>
+                <h2>Welcome</h2>
+                <input type="text" placeholder="Ingrese su nombre" id="user-name">
+                <input type="text" placeholder="Ingrese su e-mail" id="user-email">
+                <input type="password" placeholder="Ingrese su contraseña" id="user-password">
+                <input type="text" placeholder="Ingrese su dirección" id="user-address">
+                <input type="text" placeholder="Ingrese su teléfono" id="user-phone">
+                <input type="submit" value="Registrarse">
+                <p id="register-message" hidden></p>
+            </form>
+        </div>
     </template>
     <script src="main.js"></script>
 </body>
